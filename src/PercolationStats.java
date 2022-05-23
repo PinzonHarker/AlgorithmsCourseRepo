@@ -1,3 +1,5 @@
+import edu.princeton.cs.algs4.StdIn;
+import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
 
@@ -31,13 +33,12 @@ public class PercolationStats {
             count = 0;
             // When percolates return b
             while (!p.percolates()) {
-                r1 = StdRandom.uniform(n * n);
-                r2 = StdRandom.uniform(n * n);
+                r1 = StdRandom.uniform(n);
+                r2 = StdRandom.uniform(n);
                 if (p.isFull(r1, r2)){
                     p.open(r1, r2);
                     count++;
                 }
-                System.out.println(p.percolates());
             }
             probability[ii] = count / n * n;
         }
@@ -45,7 +46,7 @@ public class PercolationStats {
 
     // sample mean of percolation threshold
     public double mean() {
-        return probability[0];
+        return StdStats.mean(probability);
     }
 
     // sample standard deviation of percolation threshold
@@ -65,8 +66,10 @@ public class PercolationStats {
 
     // test client (see below)
     public static void main(String[] args) {
-        final PercolationStats ps = new PercolationStats(1, 3);
-        ps.mean();
+        final PercolationStats ps = new PercolationStats(2, 3);
+        StdOut.print(ps.mean());
+        
+        
     }
 
 }
