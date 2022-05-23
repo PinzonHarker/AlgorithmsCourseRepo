@@ -16,7 +16,6 @@ public class Percolation {
 
     public boolean begin = true;
     public boolean end = true;
-    // public boolean[][] state;
     public boolean[] state1;
     public WeightedQuickUnionUF qu;
     public int size;    // L lenght of matrix LxL
@@ -29,28 +28,17 @@ public class Percolation {
      */
     public Percolation(int n) {
         this.size = n;
-        // this.state = new boolean[n][n];
-        this.state1 = new boolean[n * n + 2];
+        this.state1 = new boolean[n * n ];
         this.qu = new WeightedQuickUnionUF(n * n + 2);
-        // for (int i = 0; i < n; i++) {
-        // for (int j = 0; j < n; j++) {
-        // this.state[i][j] = false;
-        // }
-        // }
 
-        // State false in all boxes of matrix except virtual points at the end as begin
-        // and end.
-        this.state1[size * size] = begin;
-        this.state1[size * size + 1] = end;
+
+        // State false in all boxes of matrix except virtual points at the begin and end
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 this.state1[i * size + j] = false;
             }
         }
 
-        // for (int ii = 0; ii < n * n; i++){
-
-        // }
     }
 
     /**
@@ -61,8 +49,6 @@ public class Percolation {
      * @param col of site.
      */
     public void open(int row, int col) {
-        // state[row][col] = true;
-
         index = row * size + col;
         state1[index] = true;
 
@@ -144,7 +130,7 @@ public class Percolation {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 if (isFull(i, j)) {
-                    System.out.print("*");
+                    System.out.print("-");
                 } else {
                     System.out.print("+");
                 }
@@ -164,12 +150,12 @@ public class Percolation {
      * @param args
      */
     public static void main(String[] args) {
-        final int n = 3;
+        final int n = 4;
         final Percolation p = new Percolation(n);
 
         p.open(0, 1);
         p.open(1, 1);
-        p.open(2, 2);
+        p.open(2, 3);
         p.show();
         System.out.println(p.percolates());
     }
