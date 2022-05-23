@@ -1,8 +1,6 @@
-/* import edu.princeton.cs.algs4.StdRandom;
-import edu.princeton.cs.algs4.StdStats; */
-
+import edu.princeton.cs.algs4.StdIn;
+import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
-// import java.util.Arrays;
 
 /**
  * Finds percolation with begin and end points, and a matrix with sites blocked
@@ -16,9 +14,9 @@ public class Percolation {
 
     public boolean begin = true;
     public boolean end = true;
-    public boolean[] state1;
+    public boolean[] state;
     public WeightedQuickUnionUF qu;
-    public int size;    // L lenght of matrix LxL
+    public int size; // L lenght of matrix LxL
     public int index;
 
     /**
@@ -28,14 +26,13 @@ public class Percolation {
      */
     public Percolation(int n) {
         this.size = n;
-        this.state1 = new boolean[n * n ];
+        this.state = new boolean[n * n];
         this.qu = new WeightedQuickUnionUF(n * n + 2);
-
 
         // State false in all boxes of matrix except virtual points at the begin and end
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                this.state1[i * size + j] = false;
+                this.state[i * size + j] = false;
             }
         }
 
@@ -50,7 +47,7 @@ public class Percolation {
      */
     public void open(int row, int col) {
         index = row * size + col;
-        state1[index] = true;
+        state[index] = true;
 
         // Connect it to all of its adjacent open sites.
         if (isOpen(row + 1, col)) { // down
@@ -81,7 +78,7 @@ public class Percolation {
      */
     public boolean isOpen(int row, int col) {
         try {
-            return state1[row * size + col];
+            return state[row * size + col];
         } catch (Exception e) {
             return false;
         }
@@ -106,7 +103,7 @@ public class Percolation {
     public int numberOfOpenSites() {
         int count = 0;
         for (int i = 0; i < size * size; i++) {
-            if (state1[i]) {
+            if (state[i]) {
                 count++;
             }
         }
@@ -127,21 +124,7 @@ public class Percolation {
      * Showing matrix in and percolation.
      */
     public void show() {
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                if (isFull(i, j)) {
-                    System.out.print("-");
-                } else {
-                    System.out.print("+");
-                }
-                System.out.print("\t");
-            }
-            System.out.println();
-        }
-        //show also id of Id array in QU
-        for (int j = 0; j < size * size; j++) {
-            System.out.print(qu.find(j) + " ");
-        }
+
     }
 
     /**
@@ -150,13 +133,46 @@ public class Percolation {
      * @param args
      */
     public static void main(String[] args) {
-        final int n = 4;
-        final Percolation p = new Percolation(n);
+        System.out.print("Size of matrix: ");
+        final int l = StdIn.readInt();
+        final Percolation per = new Percolation(l);
+        while (!StdIn.isEmpty() || StdIn.readString() == "") {
+            final int p = StdIn.readInt();
+            final int q = StdIn.readInt();
+            per.open(p, q);
 
-        p.open(0, 1);
-        p.open(1, 1);
-        p.open(2, 3);
-        p.show();
-        System.out.println(p.percolates());
+            // show() method include in main for not making troubles with API
+            for (int i = 0; i < per.size; i++) {
+                for (int j = 0; j < per.size; j++) {
+                    if (per.isFull(i, j)) {
+                        System.out.print("-");
+                    } else {
+                        System.out.print("+");
+                    }
+                    System.out.print("\t");
+                }
+                System.out.println();
+            }
+            // show also id of Id array in QU
+            for (int j = 0; j < per.size * per.size; j++) {
+                System.out.print(per.qu.find(j) + " ");
+            }
+        }
+        // p.show();
+
+        System.out.println("\n The system percolates?: " + per.percolates());
+
+        // final int n = StdIn.readInt();
+        // final WeightedQuickUnionUF uf = new WeightedQuickUnionUF(n);
+        // while (!StdIn.isEmpty()) {
+        // final int p = StdIn.readInt();
+        // final int q = StdIn.readInt();
+        // if (uf.find(p) == uf.find(q)) {
+        // continue;
+        // }
+        // uf.union(p, q);
+        // StdOut.println(p + " " + q);
+        // }
+        // StdOut.println(uf.count() + " components");
     }
 }

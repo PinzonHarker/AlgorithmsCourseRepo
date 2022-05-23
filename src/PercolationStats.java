@@ -1,4 +1,5 @@
-//import Percolation.*;
+import edu.princeton.cs.algs4.StdRandom;
+import edu.princeton.cs.algs4.StdStats;
 
 /**
  * Stats makes statictics for a lot of n-by-n matrix and 
@@ -11,20 +12,19 @@ public class PercolationStats {
 
     Percolation p;
 
-    public PercolationStats() {
-
-    }
-
     // perform independent trials on an n-by-n grid
     public PercolationStats(int n, int trials) {
-        if (n < 0) {
-            throw new IllegalArgumentException();
+        if (trials < 0) {
+            throw new IllegalArgumentException("No trials to prove.");
         }
+        // Testing number of trials for some matrix.
         for (int ii = 0; ii < trials; ii++){
             p = new Percolation(n);
-
+            // 
+            for (int jj = 0; jj < n * n; jj++) {
+                
+            }
         }
-        // 
     }
 
     // sample mean of percolation threshold
