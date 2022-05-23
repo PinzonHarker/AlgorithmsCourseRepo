@@ -1,0 +1,9 @@
+{
+    "java.project.sourcePaths": ["src"],
+    "java.project.outputPath": "bin",
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar"
+    ],
+    "java.checkstyle.configuration": "https://raw.githubusercontent.com/microsoft/vscode-java-test/main/java-extension/build-tools/src/main/resources/checkstyle/checkstyle.xml",
+    "java.checkstyle.version": "8.18"
+}
