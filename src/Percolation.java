@@ -12,12 +12,10 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
 
-    public boolean begin = true;
-    public boolean end = true;
-    public boolean[] state;
-    public WeightedQuickUnionUF qu;
-    public int size; // L lenght of matrix LxL
-    public int index;
+    private boolean[] state;
+    private WeightedQuickUnionUF qu;
+    private int size; // L lenght of matrix LxL
+    private int index;
 
     /**
      * Creates n-by-n grid (0 to n) with all sites blocked (false).
