@@ -13,9 +13,8 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 public class Percolation {
 
     private boolean[] state;
-    private WeightedQuickUnionUF qu;
-    private int size; // L lenght of matrix LxL
-    private int index;
+    private final WeightedQuickUnionUF qu;
+    private final int size; // L lenght of matrix LxL
 
     /**
      * Creates n-by-n grid (0 to n) with all sites blocked (false).
@@ -44,7 +43,7 @@ public class Percolation {
      * @param col of site.
      */
     public void open(int row, int col) {
-        index = row * size + col;
+        final int index = row * size + col;
         state[index] = true;
 
         // Connect it to all of its adjacent open sites.
@@ -76,11 +75,11 @@ public class Percolation {
      * @return true if it is open. False otherwise.
      */
     public boolean isOpen(int row, int col) {
-        try {
-            return state[row * size + col];
-        } catch (Exception e) {
+        if (row >= size || row < 0 || col >= size || col < 0) {
             return false;
         }
+        return state[row * size + col];
+
     }
 
     /**

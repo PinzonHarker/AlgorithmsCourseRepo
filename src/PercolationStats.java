@@ -14,12 +14,15 @@ import edu.princeton.cs.algs4.StdStats;
 
 public class PercolationStats {
 
-    Percolation p;
-    double probability[];
-    int count;
+    private final double probability[];
+    private int count;
+    private final int trials;
+    private final double CONFIDENCE_95 = 1.96;
 
     // perform independent trials on an n-by-n grid
     public PercolationStats(int n, int trials) {
+        Percolation p;
+        this.trials = trials;
         probability = new double [trials];
         if (trials < 0) {
             throw new IllegalArgumentException("No trials to prove.");
@@ -32,7 +35,7 @@ public class PercolationStats {
             while (!p.percolates()) {
                 final int r1 = StdRandom.uniform(n);
                 final int r2 = StdRandom.uniform(n);
-                if (p.isFull(r1, r2)){
+                if (p.isFull(r1, r2)) {
                     p.open(r1, r2);
                     count++;
                 }
@@ -54,22 +57,23 @@ public class PercolationStats {
 
     // low endpoint of 95% confidence interval
     public double confidenceLo() {
-        return 0.0;
+        return mean() - (CONFIDENCE_95 * Math.sqrt(stddev()) / Math.sqrt(trials));
     }
 
     // high endpoint of 95% confidence interval
     public double confidenceHi() {
-        return 0.0;
+        return mean() + (CONFIDENCE_95 * Math.sqrt(stddev()) / Math.sqrt(trials));
     }
 
     // test client (see below)
-    public static void main(String[] args) {
+    public static void main(String args[]) {
         final int size = Integer.parseInt(args[0]);
         final int trials = Integer.parseInt(args[1]);
         final PercolationStats ps = new PercolationStats(size, trials);
-        StdOut.println("mean \t= " + ps.mean());
-        StdOut.println("stddev \t= " + ps.stddev());
-        
+        StdOut.println("mean\t= " + ps.mean());
+        StdOut.println("stddev\t= " + ps.stddev());
+        StdOut.println("confidenceHi\t= " + ps.confidenceHi());
+        StdOut.println("confidenceLo\t= " + ps.confidenceLo());
     }
 
 }
