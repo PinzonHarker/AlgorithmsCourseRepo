@@ -2,34 +2,50 @@ import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
 
 /**
- * Stats makes statictics for a lot of n-by-n matrix and 
- * provides mean, standard desviation, confidence for 95% 
+ * Stats makes statictics for a lot of n-by-n matrix and
+ * provides mean, standard desviation, confidence for 95%
  * for low and high.
+ * 
+ * 
+ * 
  * @author AndresPinzon
  */
 
 public class PercolationStats {
 
     Percolation p;
+    double probability[];
+    int count;
+    int r1;  // random
+    int r2;
 
     // perform independent trials on an n-by-n grid
     public PercolationStats(int n, int trials) {
+        probability = new double [trials];
         if (trials < 0) {
             throw new IllegalArgumentException("No trials to prove.");
-        }
-        // Testing number of trials for some matrix.
-        for (int ii = 0; ii < trials; ii++){
+        } 
+        // Testing nuber of trials for some matrix.
+        for (int ii = 0; ii < trials; ii++) {
             p = new Percolation(n);
-            // 
-            for (int jj = 0; jj < n * n; jj++) {
-                
+            count = 0;
+            // When percolates return b
+            while (!p.percolates()) {
+                r1 = StdRandom.uniform(n * n);
+                r2 = StdRandom.uniform(n * n);
+                if (p.isFull(r1, r2)){
+                    p.open(r1, r2);
+                    count++;
+                }
+                System.out.println(p.percolates());
             }
+            probability[ii] = count / n * n;
         }
     }
 
     // sample mean of percolation threshold
     public double mean() {
-        return 0.0;
+        return probability[0];
     }
 
     // sample standard deviation of percolation threshold
@@ -49,7 +65,8 @@ public class PercolationStats {
 
     // test client (see below)
     public static void main(String[] args) {
-        // final PercolationStats ps = new PercolationStats(1, 3);
+        final PercolationStats ps = new PercolationStats(1, 3);
+        ps.mean();
     }
 
 }
