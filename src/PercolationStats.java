@@ -15,7 +15,6 @@ import edu.princeton.cs.algs4.StdStats;
 public class PercolationStats {
 
     private final double probability[];
-    private int count;
     private final int trials;
     private final double CONFIDENCE_95 = 1.96;
 
@@ -30,7 +29,7 @@ public class PercolationStats {
         // Testing nuber of trials for some matrix.
         for (int ii = 0; ii < trials; ii++) {
             p = new Percolation(n);
-            count = 0;
+            int count = 0;
             // When percolates return b
             while (!p.percolates()) {
                 final int r1 = StdRandom.uniform(n);

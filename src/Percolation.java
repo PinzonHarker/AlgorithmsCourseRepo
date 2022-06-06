@@ -43,6 +43,8 @@ public class Percolation {
      * @param col of site.
      */
     public void open(int row, int col) {
+        row--;
+        col--;
         final int index = row * size + col;
         state[index] = true;
 
@@ -75,6 +77,8 @@ public class Percolation {
      * @return true if it is open. False otherwise.
      */
     public boolean isOpen(int row, int col) {
+        row--;
+        col--;
         if (row >= size || row < 0 || col >= size || col < 0) {
             return false;
         }
@@ -90,6 +94,8 @@ public class Percolation {
      * @return true if it is open. False otherwise.
      */
     public boolean isFull(int row, int col) {
+        row--;
+        col--;
         return !isOpen(row, col);
     }
 
@@ -128,9 +134,9 @@ public class Percolation {
         final int l = StdIn.readInt();
         final Percolation per = new Percolation(l);
         do {
-            StdOut.print("i (0 to " + (l - 1) + ")= ");
+            // StdOut.print("i (0 to " + (l - 1) + ")= ");
             final int p = StdIn.readInt();
-            StdOut.print("j (0 to " + (l - 1) + ")= ");
+            // StdOut.print("j (0 to " + (l - 1) + ")= ");
             final int q = StdIn.readInt();
             per.open(p, q);
 
@@ -139,7 +145,7 @@ public class Percolation {
                 for (int j = 0; j < per.size; j++) {
                     if (per.isFull(i, j)) {
                         StdOut.print("-");
-                    } else {
+                    } else if (per.isOpen(i, j)) {
                         StdOut.print("+");
                     }
                     StdOut.print("\t");
@@ -151,9 +157,10 @@ public class Percolation {
                 StdOut.print(per.qu.find(j) + " ");
             }
             StdOut.println();
+            StdOut.println("\n The system percolates?: " + per.percolates());
+            StdOut.println("There are " + per.numberOfOpenSites() + " open sites.");
         } while (!StdIn.isEmpty());
 
-        StdOut.println("\n The system percolates?: " + per.percolates());
-        StdOut.println("There are " + per.numberOfOpenSites() + " open sites.");
+        
     }
 }
