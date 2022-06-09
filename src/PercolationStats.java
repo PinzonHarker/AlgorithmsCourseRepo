@@ -17,7 +17,7 @@ public class PercolationStats {
     /** Constant of confidence 95%. */
     private static final double CONFIDENCE_95 = 1.96;
     /** Probability of each trial. */
-    private double[] probability;
+    private final double[] probability;
     /** Number of trials to try for percolation. */
     private final int ntrials;
 
@@ -98,7 +98,7 @@ public class PercolationStats {
                 + ", " + ps.confidenceHi() + "]";
         StdOut.println("mean\t= " + ps.mean());
         StdOut.println("stddev\t= " + ps.stddev());
-        StdOut.println("confidence\t= " + confidence);
+        StdOut.println("95% confidence interval\t = " + confidence);
     }
 
 }
