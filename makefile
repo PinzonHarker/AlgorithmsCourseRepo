@@ -1,17 +1,16 @@
 SHELL:= /bin/zsh
-CXX=g++
-CXXFLAGS= -g
+JXX= javac
+JXXFLAGS= -g
 
-DEPS= foo.o bar.o
-TARGET= main
+DEPS= src/PercolationStats
+TARGET= src/Percolation
 
-$(TARGET).x: $(DEPS)
-  $(CXX) $(CXXFLAGS) $@.cpp $< -o main.x 
+$(TARGET).zip: all
 
-%.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $<
+$(TARGET).zip: $(TARGET).java $(DEPS).java
+	zip $@ $^
 
 .PHONY: clean
 clean:
-	rm -f *.o *~ *.x
+	rm -f *.class
 
