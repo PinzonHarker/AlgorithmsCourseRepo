@@ -1,4 +1,3 @@
-
 /**
 * Percolation of a simplificated grid system with LxL large.
 * Filling all the sites and opening what we want. For Coursera
@@ -32,6 +31,12 @@ public class Percolation {
     /** Data Structure for Union-Find problem. */
     private final WeightedQuickUnionUF qu;
 
+    /**
+     * Data structure for isFull() method,
+     * just does not includes bottom site.
+     */
+    private final WeightedQuickUnionUF quf;
+
     /** Size of a length of matrix of open sites {@code state}. */
     private final int size; // L length of matrix LxL
 
@@ -49,16 +54,17 @@ public class Percolation {
         }
         this.size = n;
         this.state = new boolean[n * n];
+        this.quf = new WeightedQuickUnionUF(n * n + 1);
         this.qu = new WeightedQuickUnionUF(n * n + 2);
         countOpenSites = 0;
 
-        // State false in all boxes of matrix except virtual
-        // points at the begin and end
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                this.state[i * size + j] = false;
-            }
-        }
+        // // State false in all boxes of matrix except virtual
+        // // points at the begin and end
+        // for (int i = 0; i < n; i++) {
+        // for (int j = 0; j < n; j++) {
+        // this.state[i * size + j] = false;
+        // }
+        // }
 
     }
 
@@ -85,20 +91,25 @@ public class Percolation {
         // Connect it to all of its adjacent open sites.
         if (isOnGrid(row + 1, col) && isOpen(row + 1, col)) { // down
             qu.union(index, index + size);
+            quf.union(index, index + size);
         }
         if (isOnGrid(row - 1, col) && isOpen(row - 1, col)) { // up
             qu.union(index, index - size);
+            quf.union(index, index - size);
         }
         if (isOnGrid(row, col + 1) && isOpen(row, col + 1)) { // right
             qu.union(index, index + 1);
+            quf.union(index, index + 1);
         }
         if (isOnGrid(row, col - 1) && isOpen(row, col - 1)) { // left
             qu.union(index, index - 1);
+            quf.union(index, index - 1);
         }
 
         // Testing if row 0 and row n are available for connect them.
         if (row == 1) {
             qu.union(index(1, col), size * size);
+            quf.union(index(1, col), size * size);
         }
         if (row == size) {
             qu.union(index(row, col), size * size + 1);
@@ -115,18 +126,6 @@ public class Percolation {
     public boolean isOpen(final int row, final int col) {
         validateSite(row, col);
         return state[index(row, col)];
-    }
-
-    /**
-     * is the site (row, col) full?
-     *
-     * @param row It is the row parameter.
-     * @param col It is the col parameter.
-     * @return true if it is open. False otherwise.
-     */
-    public boolean isFull(final int row, final int col) {
-        validateSite(row, col);
-        return !isOpen(row, col);
     }
 
     /**
@@ -147,7 +146,7 @@ public class Percolation {
      */
     private void validateSite(final int row, final int col) {
         if (!isOnGrid(row, col)) {
-            throw new IndexOutOfBoundsException("Index is out of bounds");
+            throw new IllegalArgumentException("Index is out of bounds");
         }
     }
 
@@ -178,6 +177,18 @@ public class Percolation {
     }
 
     /**
+     * is the site (row, col) full?
+     *
+     * @param row It is the row parameter.
+     * @param col It is the col parameter.
+     * @return true if it is open. False otherwise.
+     */
+    public boolean isFull(final int row, final int col) {
+        validateSite(row, col);
+        return quf.find(size * size) == quf.find(index(row, col));
+    }
+
+    /**
      * If the system connects two end points, percolates, returns true.
      * Depends on Matrix manipulation.
      *
@@ -187,22 +198,25 @@ public class Percolation {
         return qu.find(size * size) == qu.find(size * size + 1);
     }
 
-    /**
-     * Shows the matrix for percolation in object.
-     */
-    private void show() {
-        for (int i = 1; i < size + 1; i++) {
-            for (int j = 1; j < size + 1; j++) {
-                if (isFull(i, j)) {
-                    StdOut.print("-");
-                } else if (isOpen(i, j)) {
-                    StdOut.print("+");
-                }
-                StdOut.print("\t");
-            }
-            StdOut.println();
-        }
-    }
+    // /**
+    //  * Shows the matrix for percolation in object.
+    //  */
+    // private void show() {
+    //     for (int i = 1; i < size + 1; i++) {
+    //         for (int j = 1; j < size + 1; j++) {
+    //             if (!isOpen(i, j)) {
+    //                 StdOut.print("-");
+    //             } else {
+    //                 StdOut.print("+");
+    //             }
+    //             StdOut.print("\t");
+    //         }
+    //         StdOut.println();
+    //     }
+    //     for (int j = 0; j < size * size + 2; j++) {
+    //         StdOut.print(qu.find(j) + " ");
+    //     }
+    // }
 
     /**
      * Test client.
@@ -221,12 +235,9 @@ public class Percolation {
             per.open(p, q);
 
             // show() method include in main for not making troubles with API
-            per.show();
+           // per.show();
             // show also Id array in QU, with two end points
 
-            for (int j = 0; j < per.size * per.size + 2; j++) {
-                StdOut.print(per.qu.find(j) + " ");
-            }
             StdOut.println();
             StdOut.println("\n The system percolates?: " + per.percolates());
             StdOut.println("There are "
